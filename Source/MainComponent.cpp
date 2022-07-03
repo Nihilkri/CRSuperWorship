@@ -5,6 +5,39 @@ MainComponent::MainComponent()
 {
     // Make sure you set the size of the component after
     // you add any child components.
+    header.setColour(juce::TextButton::buttonColourId, juce::Colours::cornflowerblue);
+    header.setButtonText("Header");
+    addAndMakeVisible(header);
+
+    footer.setColour(juce::TextButton::buttonColourId, juce::Colours::cornflowerblue);
+    footer.setButtonText("Footer");
+    addAndMakeVisible(footer);
+
+    sidebar.setColour(juce::TextButton::buttonColourId, juce::Colours::grey);
+    addAndMakeVisible(sidebar);
+
+    sideItemA.setColour(juce::TextButton::buttonColourId, juce::Colours::maroon);
+    sideItemB.setColour(juce::TextButton::buttonColourId, juce::Colours::maroon);
+    sideItemC.setColour(juce::TextButton::buttonColourId, juce::Colours::maroon);
+    sideItemA.setButtonText("Item A");
+    sideItemB.setButtonText("Item B");
+    sideItemC.setButtonText("Item C");
+    addAndMakeVisible(sideItemA);
+    addAndMakeVisible(sideItemB);
+    addAndMakeVisible(sideItemC);
+
+    limeContent.setColour(juce::TextButton::buttonColourId, juce::Colours::lime);
+    addAndMakeVisible(limeContent);
+
+    grapefruitContent.setColour(juce::TextButton::buttonColourId, juce::Colours::yellowgreen);
+    addAndMakeVisible(grapefruitContent);
+
+    lemonContent.setColour(juce::TextButton::buttonColourId, juce::Colours::yellow);
+    addAndMakeVisible(lemonContent);
+
+    orangeContent.setColour(juce::TextButton::buttonColourId, juce::Colours::orange);
+    addAndMakeVisible(orangeContent);
+
     setSize (800, 600);
 
     // Some platforms require permissions to open input channels so request that here
@@ -17,7 +50,7 @@ MainComponent::MainComponent()
     else
     {
         // Specify the number of input and output channels that we want to open
-        setAudioChannels (2, 2);
+        setAudioChannels (0, 2);
     }
 }
 
@@ -37,6 +70,13 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     // but be careful - it will be called on the audio thread, not the GUI thread.
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
+  juce::String message;
+  message << "Preparing to play audio...\n";
+  message << " samplesPerBlockExpected = " << samplesPerBlockExpected << "\n";
+  message << " sampleRate = " << sampleRate;
+  juce::Logger::getCurrentLogger()->writeToLog(message);
+  juce::Logger::outputDebugString(message);
+  std::cout << message << std::endl;
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -62,9 +102,15 @@ void MainComponent::releaseResources()
 void MainComponent::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
     // You can add your drawing code here!
+    g.fillAll(juce::Colours::darkred);
+
+    g.setColour(juce::Colours::lightblue);
+    g.setFont(20.0f);
+    g.drawText("Hello, World!", getLocalBounds(), juce::Justification::centred, true);
+    
 }
 
 void MainComponent::resized()
@@ -72,4 +118,25 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
+    auto area = getLocalBounds();
+
+    auto headerFooterHeight = 36;
+    header.setBounds(area.removeFromTop(headerFooterHeight));
+    footer.setBounds(area.removeFromBottom(headerFooterHeight));
+
+    auto sideBarArea = area.removeFromRight(juce::jmax(80, area.getWidth() / 4));
+    sidebar.setBounds(sideBarArea);
+
+    auto sideItemHeight = 40;
+    auto sideItemMargin = 5;
+    sideItemA.setBounds(sideBarArea.removeFromTop(sideItemHeight).reduced(sideItemMargin));
+    sideItemB.setBounds(sideBarArea.removeFromTop(sideItemHeight).reduced(sideItemMargin));
+    sideItemC.setBounds(sideBarArea.removeFromTop(sideItemHeight).reduced(sideItemMargin));
+
+    auto contentItemHeight = 24;
+    limeContent.setBounds(area.removeFromTop(contentItemHeight)); // [1]
+    grapefruitContent.setBounds(area.removeFromTop(contentItemHeight));
+    lemonContent.setBounds(area.removeFromTop(contentItemHeight));
+    orangeContent.setBounds(area.removeFromTop(contentItemHeight));
+
 }

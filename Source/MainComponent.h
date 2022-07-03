@@ -2,6 +2,7 @@
 
 #include <JuceHeader.h>
 
+
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -26,6 +27,18 @@ public:
 private:
     //==============================================================================
     // Your private member variables go here...
+  juce::TextButton header;
+  juce::TextButton sidebar;
+
+  juce::TextButton sideItemA; // [3]
+  juce::TextButton sideItemB; // [4]
+  juce::TextButton sideItemC; // [5]
+
+  juce::TextButton limeContent;
+  juce::TextButton grapefruitContent;
+  juce::TextButton lemonContent;
+  juce::TextButton orangeContent;
+  juce::TextButton footer;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
